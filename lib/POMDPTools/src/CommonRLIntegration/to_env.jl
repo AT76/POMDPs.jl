@@ -103,3 +103,9 @@ Base.convert(::Type{RL.AbstractEnv}, m::MDP) = MDPCommonRLEnv(m)
 
 Base.convert(::Type{MDP}, env::MDPCommonRLEnv) = env.m
 Base.convert(::Type{POMDP}, env::POMDPCommonRLEnv) = env.m
+
+POMDPs.convert_s(::Type{Any}, s::S, problem::Union{MDP{S},POMDP{S}}) where {S} = s
+POMDPs.convert_s(::Type{S}, s::Any, problem::Union{MDP{S},POMDP{S}}) where {S} = convert(S, s)
+
+POMDPs.convert_o(::Type{Any}, o::O, problem::POMDP{<:Any,<:Any,O}) where {O} = o
+POMDPs.convert_o(::Type{O}, o::Any, problem::POMDP{<:Any,<:Any,O}) where {O} = convert(O, o)
