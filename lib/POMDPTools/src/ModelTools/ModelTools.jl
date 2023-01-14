@@ -43,6 +43,9 @@ include("terminal_state.jl")
 export GenerativeBeliefMDP
 include("generative_belief_mdp.jl")
 
+export GenerativeFullyObservablePOMDP
+include("generative_fully_observable_pomdp.jl")
+
 export FullyObservablePOMDP
 include("fully_observable_pomdp.jl")
 
