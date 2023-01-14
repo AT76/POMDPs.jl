@@ -38,6 +38,7 @@ RL.@provide RL.clone(env::MDPCommonRLEnv{RLO}) where {RLO} = MDPCommonRLEnv{RLO}
 RL.@provide RL.render(env::MDPCommonRLEnv) = render(env.m, (sp=env.s,))
 RL.@provide RL.state(env::MDPCommonRLEnv{RLO}) where {RLO} = convert_s(RLO, env.s, env.m)
 RL.@provide RL.valid_actions(env::MDPCommonRLEnv) = actions(env.m, env.s)
+RL.@provide RL.valid_action_mask(env::MDPCommonRLEnv) = in.(actions(env.m), (actions(env.m, env.s),))
 
 RL.observations(env::MDPCommonRLEnv{RLO}) where {RLO} = (convert_s(RLO, s, env.m) for s in states(env.m)) # should really be some kind of lazy map that handles uncountably infinite spaces
 RL.provided(::typeof(RL.observations), ::Type{<:Tuple{MDPCommonRLEnv{<:Any, M, <:Any}}}) where {M} = static_hasmethod(states, Tuple{<:M})
@@ -83,6 +84,7 @@ RL.@provide RL.clone(env::POMDPCommonRLEnv{RLO}) where {RLO} = POMDPCommonRLEnv{
 RL.@provide RL.render(env::POMDPCommonRLEnv) = render(env.m, (sp=env.s, o=env.o))
 RL.@provide RL.state(env::POMDPCommonRLEnv) = (env.s, env.o)
 RL.@provide RL.valid_actions(env::POMDPCommonRLEnv) = actions(env.m, env.s)
+RL.@provide RL.valid_action_mask(env::POMDPCommonRLEnv) = in.(actions(env.m), (actions(env.m, env.s),))
 
 RL.observations(env::POMDPCommonRLEnv{RLO}) where {RLO} = (convert_o(RLO, o, env.m) for o in observations(env.m)) # should really be some kind of lazy map that handles uncountably infinite spaces
 RL.provided(::typeof(RL.observations), ::Type{<:Tuple{POMDPCommonRLEnv{<:Any, M, <:Any, <:Any}}}) where {M} = static_hasmethod(observations, Tuple{<:M})
@@ -92,6 +94,9 @@ RL.@provide function RL.setstate!(env::POMDPCommonRLEnv, so)
     env.o = last(so)
     return nothing
 end
+
+RL.@provide RL.player(::Union{MDPCommonRLEnv,POMDPCommonRLEnv}) = 1
+RL.@provide RL.players(::Union{MDPCommonRLEnv,POMDPCommonRLEnv}) = [1]
 
 Base.convert(::Type{RL.AbstractEnv}, m::POMDP) = POMDPCommonRLEnv(m)
 Base.convert(::Type{RL.AbstractEnv}, m::MDP) = MDPCommonRLEnv(m)
