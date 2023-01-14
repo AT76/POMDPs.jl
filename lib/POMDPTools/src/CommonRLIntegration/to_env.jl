@@ -102,6 +102,9 @@ RL.@provide RL.players(::Union{MDPCommonRLEnv,POMDPCommonRLEnv}) = [1]
 Base.convert(::Type{RL.AbstractEnv}, m::POMDP) = POMDPCommonRLEnv(m)
 Base.convert(::Type{RL.AbstractEnv}, m::MDP) = MDPCommonRLEnv(m)
 
+POMDPsCommonRLEnv(m::POMDP, s) = POMDPCommonRLEnv(m, s)
+POMDPsCommonRLEnv(m::MDP, s) = MDPCommonRLEnv(m, s)
+
 Base.convert(::Type{MDP}, env::MDPCommonRLEnv) = env.m
 Base.convert(::Type{POMDP}, env::POMDPCommonRLEnv) = env.m
 
