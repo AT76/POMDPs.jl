@@ -8,6 +8,7 @@ import CommonRLInterface
 using Tricks: static_hasmethod # Yuck! 
 
 export
+    MDPCommonRLEnv,
     POMDPCommonRLEnv,
     POMDPsCommonRLEnv
 include("to_env.jl") 
